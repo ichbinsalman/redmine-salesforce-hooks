@@ -1,3 +1,7 @@
+require 'redmine'
+
+require 'salesforce_rest'
+
 Redmine::Plugin.register :salesforce do
   name 'Salesforce plugin'
   author 'Peak & Peak'
