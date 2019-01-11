@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 
 module SalesforceRest
+  module_function
   def get_token
     begin
         uri = URI('https://test.salesforce.com/services/oauth2/token/')
