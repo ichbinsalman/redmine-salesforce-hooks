@@ -19,7 +19,7 @@ module SalesforceRest
           puts "response #{res.body}"
           return JSON.parse(res.body)
       rescue => e
-          raise WorkflowError, "failed #{eabc} #{uri}"
+          raise WorkflowError, "failed #{e} #{uri}"
       end
     end
   end
