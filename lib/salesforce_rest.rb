@@ -11,8 +11,7 @@ module SalesforceRest
         req = Net::HTTP::Post.new(uri.path)
         req.set_form_data({'grant_type' => 'password', 'client_id' => Setting.plugin_salesforce['client_id'], 'client_secret' => Setting.plugin_salesforce['client_secret'], 'username' => Setting.plugin_salesforce['username'], 'password' => Setting.plugin_salesforce['password']})
         res = http.request(req)
-        puts "response #{res.body}"
-        return JSON.parse(res.body)['access_token']
+        return JSON.parse(res.body)
     rescue => e
         raise WorkflowError, "failed #{e} #{uri}"
     end
@@ -32,6 +31,8 @@ module SalesforceRest
       "REDMINE_Status__c" => project['status'],
       "Name" => project['name']
     })
+
+    logger.info("sending salesforce request")
 
     req_options = {
       use_ssl: uri.scheme == "https",
