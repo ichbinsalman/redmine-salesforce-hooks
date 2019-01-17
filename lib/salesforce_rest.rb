@@ -42,6 +42,7 @@ module SalesforceRest
 
   module_function
   def delete_object(name, id)
+    logger = Logger.new(STDOUT)
     token_details = get_token()
     uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/#{name}/#{id}")
     request = Net::HTTP::Delete.new(uri)
