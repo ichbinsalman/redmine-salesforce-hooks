@@ -89,4 +89,20 @@ module SalesforceRest
     logger.info(response.body)
   end
 
+  module function
+    def delete_object(name, id)
+      token_details = get_token()
+      uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/#{name}/#{id}")
+      request = Net::HTTP::Delete.new(uri)
+      request["Authorization"] = "Bearer #{token_details['access_token']}"
+      req_options = {
+        use_ssl: uri.scheme == "https",
+      }
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+      logger.info(response.code)
+      logger.info(response.body)
+    end
+
 end
