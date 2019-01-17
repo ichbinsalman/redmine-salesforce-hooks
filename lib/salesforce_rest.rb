@@ -25,12 +25,7 @@ module SalesforceRest
     request = Net::HTTP::Patch.new(uri)
     request["Authorization"] = "Bearer #{token_details['access_token']}"
     request.content_type = "application/json"
-    request.body = JSON.dump({
-      "REDMINE_Description__c" => project['description'],
-      "REDMINE_Go_Live_Date__c" => project['go_live_date'],
-      "REDMINE_Status__c" => project['status'],
-      "Name" => project['name']
-    })
+    request.body = project.data
 
     logger.info("sending salesforce request")
 
@@ -57,6 +52,29 @@ module SalesforceRest
       "REDMINE_Description__c" => issue['description'],
       "Name" => issue['subject']
     })
+
+    logger.info("sending salesforce request")
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+    logger.info(response.code)
+    logger.info(response.body)
+  end
+
+  module_function
+  def update_object(name, details)
+    logger = Logger.new(STDOUT)
+    token_details = get_token()
+    uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/#{name}/#{details['id']}")
+    request = Net::HTTP::Patch.new(uri)
+    request["Authorization"] = "Bearer #{token_details['access_token']}"
+    request.content_type = "application/json"
+    request.body = details['data']
 
     logger.info("sending salesforce request")
 
