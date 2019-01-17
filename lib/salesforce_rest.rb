@@ -18,55 +18,6 @@ module SalesforceRest
   end
 
   module_function
-  def update_project(project)
-    logger = Logger.new(STDOUT)
-    token_details = get_token()
-    uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/project/#{project['id']}")
-    request = Net::HTTP::Patch.new(uri)
-    request["Authorization"] = "Bearer #{token_details['access_token']}"
-    request.content_type = "application/json"
-    request.body = project.data
-
-    logger.info("sending salesforce request")
-
-    req_options = {
-      use_ssl: uri.scheme == "https",
-    }
-
-    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-      http.request(request)
-    end
-    logger.info(response.code)
-    logger.info(response.body)
-  end
-
-  module_function
-  def update_issue(issue)
-    logger = Logger.new(STDOUT)
-    token_details = get_token()
-    uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/issue/#{issue['id']}")
-    request = Net::HTTP::Patch.new(uri)
-    request["Authorization"] = "Bearer #{token_details['access_token']}"
-    request.content_type = "application/json"
-    request.body = JSON.dump({
-      "REDMINE_Description__c" => issue['description'],
-      "Name" => issue['subject']
-    })
-
-    logger.info("sending salesforce request")
-
-    req_options = {
-      use_ssl: uri.scheme == "https",
-    }
-
-    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-      http.request(request)
-    end
-    logger.info(response.code)
-    logger.info(response.body)
-  end
-
-  module_function
   def update_object(name, details)
     logger = Logger.new(STDOUT)
     token_details = get_token()
@@ -89,4 +40,19 @@ module SalesforceRest
     logger.info(response.body)
   end
 
+  module_function
+  def delete_object(name, id)
+    token_details = get_token()
+    uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/#{name}/#{id}")
+    request = Net::HTTP::Delete.new(uri)
+    request["Authorization"] = "Bearer #{token_details['access_token']}"
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+    logger.info(response.code)
+    logger.info(response.body)
+  end
 end

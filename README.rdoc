@@ -1,3 +1,3 @@
-= salesforce
+= Redmine Salesforce Integration plugin
 
-Description goes here
+This plugin has methods to update and delete salesforce objects which have custom rest endpoints written inside salesforce
