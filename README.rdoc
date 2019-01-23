@@ -1,3 +1,13 @@
 = Redmine Salesforce Integration plugin
 
 This plugin has methods to update and delete salesforce objects which have custom rest endpoints written inside salesforce
+
+== Installation
+
+From a GIT repository:
+
+* Clone repository with <b>git clone https://github.com/ichbinsalman/redmine_salesforce_hooks.git plugins/redmine_salesforce_hooks</b> command
+
+After download:
+
+* Restart Redmine
