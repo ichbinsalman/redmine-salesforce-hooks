@@ -9,7 +9,7 @@ module SalesforceRest
         if !Setting.plugin_redmine_salesforce_hooks['login_url'].nil? && !Setting.plugin_redmine_salesforce_hooks['login_url'].empty?
           login_url = Setting.plugin_redmine_salesforce_hooks['login_url']
         end
-        uri = URI('#{login_url}/services/oauth2/token')
+        uri = URI("#{login_url}/services/oauth2/token")
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
         req = Net::HTTP::Post.new(uri.path)
