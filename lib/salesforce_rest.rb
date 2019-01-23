@@ -5,11 +5,15 @@ module SalesforceRest
   module_function
   def get_token
     begin
-        uri = URI('https://test.salesforce.com/services/oauth2/token')
+        login_url = 'https://test.salesforce.com'
+        if !Setting.plugin_redmine_salesforce_hooks['login_url'].nil? && !Setting.plugin_redmine_salesforce_hooks['login_url'].empty?
+          login_url = Setting.plugin_redmine_salesforce_hooks['login_url']
+        end
+        uri = URI('#{login_url}/services/oauth2/token')
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
         req = Net::HTTP::Post.new(uri.path)
-        req.set_form_data({'grant_type' => 'password', 'client_id' => Setting.plugin_salesforce['client_id'], 'client_secret' => Setting.plugin_salesforce['client_secret'], 'username' => Setting.plugin_salesforce['username'], 'password' => Setting.plugin_salesforce['password']})
+        req.set_form_data({'grant_type' => 'password', 'client_id' => Setting.plugin_redmine_salesforce_hooks['client_id'], 'client_secret' => Setting.plugin_redmine_salesforce_hooks['client_secret'], 'username' => Setting.plugin_redmine_salesforce_hooks['username'], 'password' => Setting.plugin_redmine_salesforce_hooks['password']})
         res = http.request(req)
         return JSON.parse(res.body)
     rescue => e
