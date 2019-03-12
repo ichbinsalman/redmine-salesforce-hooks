@@ -45,6 +45,52 @@ module SalesforceRest
   end
 
   module_function
+  def insert_object(name, details)
+    logger = Logger.new(STDOUT)
+    token_details = get_token()
+    uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/#{name}")
+    request = Net::HTTP::Post.new(uri)
+    request["Authorization"] = "Bearer #{token_details['access_token']}"
+    request.content_type = "application/json"
+    request.body = details['data']
+
+    logger.info("sending salesforce request")
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+    logger.info(response.code)
+    logger.info(response.body)
+  end
+
+  module_function
+  def upsert_object(name, details)
+    logger = Logger.new(STDOUT)
+    token_details = get_token()
+    uri = URI.parse("#{token_details['instance_url']}/services/apexrest/redmine/#{name}")
+    request = Net::HTTP::Put.new(uri)
+    request["Authorization"] = "Bearer #{token_details['access_token']}"
+    request.content_type = "application/json"
+    request.body = details['data']
+
+    logger.info("sending salesforce request")
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+    logger.info(response.code)
+    logger.info(response.body)
+  end
+
+  module_function
   def delete_object(name, id)
     logger = Logger.new(STDOUT)
     token_details = get_token()
